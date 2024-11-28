@@ -55,6 +55,7 @@ const onSubmitLogin = async (data: FormData) => {
           className="w-1/2"
         />
       </div>
+      <div></div>
       <div className="flex items-center justify-center h-full flex-1 bg-slate-900">
         <form
           onSubmit={handleSubmit(onSubmitLogin)}
