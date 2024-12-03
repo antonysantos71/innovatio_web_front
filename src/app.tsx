@@ -3,8 +3,9 @@ import { Button } from "./components/ui/button";
 import { Login } from "./pages/login";
 import { SingUp } from "./pages/sing-up";
 import Dashboard from "./pages/dashboard";
-import { AuthProvider } from "./contexts/auth-provider";
+
 import { Toaster } from "./components/ui/toaster";
+import AuthProviderWrapper from "./contexts/auth/auth-provider";
 
 const router = createBrowserRouter([
   {
@@ -26,9 +27,9 @@ const router = createBrowserRouter([
 ]);
 export function App() {
   return (
-    <AuthProvider>
+    <AuthProviderWrapper>
       <RouterProvider router={router} />
-      <Toaster/>
-    </AuthProvider>
+      <Toaster />
+    </AuthProviderWrapper>
   );
 }

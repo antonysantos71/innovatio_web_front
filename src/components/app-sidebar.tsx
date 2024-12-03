@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Inbox, LogOut, Search, Settings } from "lucide-react";
 
 import {
   Sidebar,
@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useNavigate } from "react-router-dom";
 
 const items = [
   {
@@ -40,6 +41,14 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const navigate = useNavigate()
+  const handleLogout = () => {
+    // Remove o token de autenticação do localStorage
+    localStorage.removeItem("authToken");
+
+    // Redireciona o usuário para a página de login
+    // navigate("/login"); // ou a rota que você usa para login
+  };
   return (
     <Sidebar className="border-none">
       <SidebarContent className="bg-slate-900">
@@ -52,7 +61,6 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title} className="">
                   <SidebarMenuButton
-                    
                     asChild
                     className="text-slate-100 hover:bg-slate-800 hover:text-slate-100"
                   >
@@ -63,6 +71,16 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuButton 
+                onClick={handleLogout}
+                asChild
+                className="text-slate-100 hover:bg-slate-800 hover:text-slate-100"
+              >
+                <a href="#">
+                  <LogOut />
+                  <span>sair</span>
+                </a>
+              </SidebarMenuButton>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

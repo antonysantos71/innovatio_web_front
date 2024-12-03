@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/contexts/auth-provider/useAuth";
 import { toast } from "@/hooks/use-toast";
+import { login } from "@/services/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -25,26 +25,29 @@ export function Login() {
     resolver: zodResolver(formScheme),
   });
 
-  const { authenticate } = useAuth();
   const navigate = useNavigate();  
 
 
-const onSubmitLogin = async (data: FormData) => {
-  const success = await authenticate(data.email, data.password);
-  if (!success) {
-    toast({
-      className: "bg-green-500 border-green-400 text-black",
-      title: "Success", 
-      description: `Login successful for ${data.email}`,
-    });
-    navigate("/dashboard"); 
-  } else {
-    toast({
-      title: "Error",
-      description: "Invalid email or password",
-    });
-  }
-};
+  const onSubmitLogin = async (data: FormData) => {
+    const { email, password } = data;
+    
+    const success = await login(email, password); 
+  
+    if (success) {
+      toast({
+        className: "bg-green-500 border-green-400 text-black",
+        title: "Sucesso", 
+        description: `Login bem-sucedido para ${email}`,
+      });
+      
+      navigate("/dashboard"); 
+    } else {
+      toast({
+        title: "Erro",
+        description: "Usuário ou senha inválidos",
+      });
+    }
+  };
 
   return (
     <div className="flex text-slate-100 h-screen">
@@ -55,7 +58,7 @@ const onSubmitLogin = async (data: FormData) => {
           className="w-1/2"
         />
       </div>
-      <div></div>
+      
       <div className="flex items-center justify-center h-full flex-1 bg-slate-900">
         <form
           onSubmit={handleSubmit(onSubmitLogin)}
@@ -69,7 +72,7 @@ const onSubmitLogin = async (data: FormData) => {
               placeholder="Digite seu email"
               className="text-sm"
             />
-            {errors.email && (
+            {errors.email && ( 
               <p className="text-red-600  text-sm">{errors.email.message}</p>
             )}
           </div>
@@ -87,7 +90,7 @@ const onSubmitLogin = async (data: FormData) => {
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <Checkbox id="terms" className="bg-slate-100 border-slate-100" />
+              <Checkbox id="terms" className="bg-slate-100 border-slate-100"/>
               <label
                 htmlFor="terms"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
